@@ -3,6 +3,8 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { CheckCircle2, Users, Zap, BarChart3 } from "lucide-react"
+import { SeedDatabaseButton } from "@/components/seed-database-button"
+import { DemoCredentials } from "@/components/demo-credentials"
 
 export const metadata: Metadata = {
   title: "School Equipment Lending Portal - Manage Equipment Efficiently",
@@ -40,6 +42,22 @@ export default function Home() {
                 </Button>
               </Link>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Demo Data Section */}
+      <section className="bg-blue-50/50 py-16 md:py-24">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-3">Try Demo First</h2>
+            <p className="text-muted-foreground mb-8">
+              Load sample data and test the platform with pre-configured accounts
+            </p>
+            <SeedDatabaseButton />
+          </div>
+          <div className="max-w-2xl mx-auto">
+            <DemoCredentials />
           </div>
         </div>
       </section>
