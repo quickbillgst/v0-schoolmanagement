@@ -1,0 +1,268 @@
+{
+  "info": {
+    "name": "School Equipment Lending Portal",
+    "description": "Complete API testing collection for equipment borrowing system",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Register User (Student)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Student\",\n  \"email\": \"john.student@school.com\",\n  \"password\": \"SecurePass123!\",\n  \"role\": \"student\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "protocol": "http",
+              "host": ["localhost", "3000"],
+              "path": ["api", "auth", "register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Register User (Staff)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jane Staff\",\n  \"email\": \"jane.staff@school.com\",\n  \"password\": \"SecurePass123!\",\n  \"role\": \"staff\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/auth/register", "protocol": "http" }
+          },
+          "response": []
+        },
+        {
+          "name": "Register User (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Admin User\",\n  \"email\": \"admin@school.com\",\n  \"password\": \"AdminPass123!\",\n  \"role\": \"admin\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/auth/register", "protocol": "http" }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@school.com\",\n  \"password\": \"AdminPass123!\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/auth/login", "protocol": "http" }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/auth/profile", "protocol": "http" }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Equipment Management",
+      "item": [
+        {
+          "name": "Get All Equipment",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{student_token}}" }],
+            "url": { "raw": "{{base_url}}/api/equipment", "protocol": "http" }
+          },
+          "response": []
+        },
+        {
+          "name": "Add Equipment (Admin Only)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"High-Resolution Projector\",\n  \"category\": \"Projector\",\n  \"quantity\": 5,\n  \"condition\": \"excellent\",\n  \"description\": \"4K projector for conference rooms. Model: Epson EB-2250U\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/equipment", "protocol": "http" }
+          },
+          "response": []
+        },
+        {
+          "name": "Add Equipment (Student - Should Fail)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{student_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Equipment\",\n  \"category\": \"Test\",\n  \"quantity\": 1,\n  \"condition\": \"good\",\n  \"description\": \"This should fail\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/equipment", "protocol": "http" }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Equipment",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/equipment/{{equipment_id}}", "protocol": "http" }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Borrowing Requests",
+      "item": [
+        {
+          "name": "Get My Requests (Student)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{student_token}}" }],
+            "url": { "raw": "{{base_url}}/api/requests", "protocol": "http" }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Requests (Admin/Staff Only)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{admin_token}}" }],
+            "url": { "raw": "{{base_url}}/api/requests", "protocol": "http" }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Borrow Request",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{student_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"equipmentId\": \"{{equipment_id}}\",\n  \"quantity\": 2,\n  \"dueDate\": \"2025-12-25\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/requests", "protocol": "http" }
+          },
+          "response": []
+        },
+        {
+          "name": "Approve Request",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"approved\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/requests/{{request_id}}", "protocol": "http" }
+          },
+          "response": []
+        },
+        {
+          "name": "Reject Request",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"rejected\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/requests/{{request_id}}", "protocol": "http" }
+          },
+          "response": []
+        },
+        {
+          "name": "Mark as Returned",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{admin_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"returned\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/requests/{{request_id}}", "protocol": "http" }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Error Testing",
+      "item": [
+        {
+          "name": "Request with Insufficient Quantity",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{student_token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"equipmentId\": \"{{equipment_id}}\",\n  \"quantity\": 1000,\n  \"dueDate\": \"2025-12-25\"\n}"
+            },
+            "url": { "raw": "{{base_url}}/api/requests", "protocol": "http" }
+          },
+          "response": []
+        },
+        {
+          "name": "Request without Authorization",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{base_url}}/api/requests", "protocol": "http" }
+          },
+          "response": []
+        },
+        {
+          "name": "Request with Invalid Token",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer invalid.token.here" }],
+            "url": { "raw": "{{base_url}}/api/requests", "protocol": "http" }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:3000", "type": "string" },
+    { "key": "admin_token", "value": "", "type": "string" },
+    { "key": "student_token", "value": "", "type": "string" },
+    { "key": "staff_token", "value": "", "type": "string" },
+    { "key": "equipment_id", "value": "", "type": "string" },
+    { "key": "request_id", "value": "", "type": "string" }
+  ]
+}
